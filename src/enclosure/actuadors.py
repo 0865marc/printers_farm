@@ -1,7 +1,5 @@
 
 
-
-
 class Actuador(object):
     pass
 
