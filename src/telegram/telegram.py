@@ -3,9 +3,10 @@ import telepot                                       # https://telepot.readthedo
 from telepot.loop import MessageLoop
 import time
 
+#TO DO: cfg file
 BOT_TOKEN = "5529655394:AAGN9hGkbrhcVYvq_EWYQzag4P5Y7q56DBs"
 
-class Bot(object):
+class Telegram_Bot(object):
 
     def __init__(self, token):
         self.bot = telepot.Bot(BOT_TOKEN)
@@ -27,8 +28,15 @@ class Bot(object):
                 pass
             else:
                 print("Unknown command")
+    
+    def getBot(self):
+        return self.bot
+
+    def sendMessage(self, chat_id, msg):
+        self.bot.sendMessage(chat_id, msg)
+
 
 
 
 if __name__ == "__main__":
-    farm_Bot = Bot(BOT_TOKEN)
+    farm_Bot = Telegram_Bot(BOT_TOKEN)

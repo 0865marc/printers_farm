@@ -9,7 +9,6 @@ py main.py --configuration <path_to_cfg_file>
 For help page:     python main.py --help
 """
 
-from email.policy import default
 import click        ## Create CLI
 
 
@@ -23,4 +22,12 @@ def get_config(cfg_file):
 
 
 if __name__ == "__main__":
-    pass
+
+    # Start the brokermosquitto -c mosquitto.conf
+
+    # Start subscriber
+
+    from enclosure.sensors import TemperatureSensor
+    a = TemperatureSensor()
+    a.random()
+    a.check()

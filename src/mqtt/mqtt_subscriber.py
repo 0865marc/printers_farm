@@ -32,6 +32,4 @@ class Subscriber_Mqtt():
 
         
 
-test = Subscriber_Mqtt()
-
 
