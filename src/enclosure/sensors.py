@@ -28,7 +28,7 @@ class TemperatureSensor(Sensor):
 
     def check(self):
         if self.lecture > 45:
-            self.msg = "Temperature too high. Opening the fan..."
+            self.msg = "Temperature too high. "
             self.send()
 
         elif self.lecture >= 30:
@@ -54,10 +54,10 @@ class HumiditySensor(Sensor):
 
     def check(self):
         if self.lecture > 80:
-            self.msg = "Humidity too high. Opening the fan..."
+            self.msg = "Humidity too high. "
             self.send()
         elif self.lecture >= 0:
-            self.msg = "Temperature OK"
+            self.msg = f"Humidity OK {self.lecture}"
             self.send()
         else:
             self.msg = "Error with the lecture of the sensor"
@@ -83,10 +83,10 @@ class FilamentRunOut(Sensor):
 
     def check(self):
         if self.lecture == "FILAMENT RUN OUT":
-            self.msg = "Temperature too high. Opening the fan..."
+            self.msg = "FILAMENT RUN OUT"
             self.send()
         elif self.lecture == "FILAMENT OK!":
-            self.msg = "Temperature OK"
+            self.msg = "Filament OK"
             self.send()
         else:
             self.msg = "Error with the lecture of the sensor"
