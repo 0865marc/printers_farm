@@ -1,5 +1,3 @@
-
-
 from mqtt.mqtt_publisher import Publisher_Mqtt
 import random
 

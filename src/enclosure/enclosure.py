@@ -1,5 +1,3 @@
-
-
 from .sensors import TemperatureSensor, HumiditySensor, FilamentRunOut
 from .actuator import Fan, Gate
 
@@ -45,7 +43,7 @@ class Enclosure(object):
         self.bot.sendMessage(f"ID {self.id} : ({self.enclosure_type}) -- Temperature too high. [{value} ºC]")
 
     def HumidityNotification(self, value):
-        self.bot.sendMessage(f"ID {self.id} : ({self.enclosure_type}) -- Humidity too high. [{value} ºC]")
+        self.bot.sendMessage(f"ID {self.id} : ({self.enclosure_type}) -- Humidity too high. [{value} %]")
 
     def loop_once(self):
         for sensor in self.sensors:

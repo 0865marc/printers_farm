@@ -7,7 +7,7 @@ py main.py --c <path_to_cfg_file>
 For help page:     python main.py --help
 """
 
-import click        ## Create CLI
+import click       
 import yaml
 from farm import Farm
 

@@ -1,7 +1,6 @@
 class Actuador(object):
-    def __init__(self, enclosure, isFilament = False):
+    def __init__(self, enclosure):
         self.status = 0
-        self.isFilament = isFilament
         self.enclosure = enclosure
     
     def set_status(self, value):
@@ -9,8 +8,8 @@ class Actuador(object):
 
 
 class Fan(Actuador):
-    def __init__(self, enclosure, isFilament=False):
-        super().__init__(enclosure, isFilament)
+    def __init__(self, enclosure):
+        super().__init__(enclosure)
 
     def activate(self):
         self.enclosure.fan.set_status(1)
@@ -21,8 +20,8 @@ class Fan(Actuador):
 
 
 class Gate(Actuador):
-    def __init__(self, enclosure, isFilament=False):
-        super().__init__(enclosure, isFilament)
+    def __init__(self, enclosure):
+        super().__init__(enclosure)
 
     def open(self):
         self.set_status(1)
