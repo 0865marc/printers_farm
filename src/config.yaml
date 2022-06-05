@@ -1,6 +1,6 @@
 telegram:
-  token: "5529655394:AAGN9hGkbrhcVYvq_EWYQzag4P5Y7q56DBs"
-  chat_id: "286104504"
+  token: "enter your token here"
+  chat_id: "enter your chat id"
 
 farm:
   timer: 10
