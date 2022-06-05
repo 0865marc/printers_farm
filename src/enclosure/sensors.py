@@ -7,64 +7,90 @@ import random
 class Sensor(object):
     def __init__(self):
         self.publisher = Publisher_Mqtt()
-        self.value = ""
-        self.msg = ""
-        self.payload = {"value":self.value, "msg":self.msg}
+        self.lecture = 99999
         
-    def publish_message(self, topic, payload):
-        """ Publish payload to an specific topic
-
-        Args:
-            topic (str): EX: sensors/humidity
-            payload (_type_): Data to be sent. Lectures of the sensor
-        """        
-        self.publisher.client.publish(topic, payload)
+    def publish_message(self, topic, value): 
+        self.publisher.client.publish(topic, value)     #PUBLISH LECTURE VIA MQTT
 
 
 class TemperatureSensor(Sensor):
-    def __init__(self):
+    def __init__(self, enclosure_id):
         Sensor.__init__(self)
+        self.enclosure_id = enclosure_id
         
     def random(self):
-        """Generete random data simulating sensor lecture"""
-        self.value = random.randint(30,50)
+        """Generate random data simulating sensor lecture"""
+        self.lecture = random.randint(30,50)
 
     def send(self):
-        """Send last lecture of the sensor to the broker via mqtt"""
-        self.publish_message("sensors/temperature", self.payload)
+        """Send last lecture and message of the sensor to the broker via mqtt"""
+        self.publish_message(f"sensors/{self.enclosure_id}/temperature/lecture", self.lecture)
 
     def check(self):
-        if self.value > 45:
+        if self.lecture > 45:
             self.msg = "Temperature too high. Opening the fan..."
             self.send()
-        elif self.value > 40:
-            self.msg = "Temperature is high, Do you want to open the fan?"
+
+        elif self.lecture >= 30:
+            self.msg = "Temperature OK"
             self.send()
         else:
-            pass
+            self.msg = "Error with the lecture of the sensor"
+            self.lecture = 99999
+            self.send()
 
 class HumiditySensor(Sensor):
-    def __init__(self):
+    def __init__(self, enclosure_id):
         Sensor.__init__(self)
+        self.enclosure_id = enclosure_id
+        
     def random(self):
-        self.value = random.randint(30,50)
-    def send(self):
-        self.publish_message("sensors/humidity", self.value)
+        """Generate random data simulating sensor lecture"""
+        self.lecture = random.randint(0,100)
 
-class NoiseSensor(Sensor):
-    def __init__(self):
-        Sensor.__init__(self)
-    def random(self):
-        self.value = random.randint(30,50)
     def send(self):
-        self.publish_message("sensors/noise", self.value)
+        """Send last lecture and message of the sensor to the broker via mqtt"""
+        self.publish_message(f"sensors/{self.enclosure_id}/temperature/lecture", self.lecture)
+
+    def check(self):
+        if self.lecture > 80:
+            self.msg = "Humidity too high. Opening the fan..."
+            self.send()
+        elif self.lecture >= 0:
+            self.msg = "Temperature OK"
+            self.send()
+        else:
+            self.msg = "Error with the lecture of the sensor"
+            self.lecture = 99999
+            self.send()
 
 class FilamentRunOut(Sensor):
-    def __init__(self):
+    def __init__(self, enclosure_id):
         Sensor.__init__(self)
+        self.enclosure_id = enclosure_id
+        
     def random(self):
-        self.value = random.randint(30,50)
+        """Generate random data simulating sensor lecture"""
+        self.lecture = random.randint(0, 100)
+        if self.lecture >= 95:
+            self.lecture = "FILAMENT RUN OUT"
+        else:
+            self.lecture = "FILAMENT OK!"
+
     def send(self):
-        self.publish_message("sensors/FilamentRunOut", self.value)
+        """Send last lecture and message of the sensor to the broker via mqtt"""
+        self.publish_message(f"sensors/{self.enclosure_id}/temperature/lecture", self.lecture)
+
+    def check(self):
+        if self.lecture == "FILAMENT RUN OUT":
+            self.msg = "Temperature too high. Opening the fan..."
+            self.send()
+        elif self.lecture == "FILAMENT OK!":
+            self.msg = "Temperature OK"
+            self.send()
+        else:
+            self.msg = "Error with the lecture of the sensor"
+            self.lecture = 99999
+            self.send()
 
 

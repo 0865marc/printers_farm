@@ -1,45 +1,65 @@
 import sys, os
 sys.path.append(os.path.dirname(sys.path[0]))
 
-from sensors import TemperatureSensor, HumiditySensor, NoiseSensor, FilamentRunOut
+from .sensors import TemperatureSensor, HumiditySensor, FilamentRunOut
 from telegram.telegram import Telegram_Bot
 
 class Enclosure(object):
     """
     Any enclosure will have a sensors array containing sensors objects. Also,
     it will have an actuators array, containing the actuators object
-    
     """
-    def __init__(self, cfg):
-        self.sensors = []
-        self.actuators = []
 
-        self.token = cfg["telegram"]["token"]
-        self.chatId = cfg["telegram"]["chat_id"]
-        self.telegram_bot = Telegram_Bot(self.token)    
-        self.bot = Telegram_Bot(self.token).getBot()    # telepot.Bot class
+    def __init__(self, id, bot):
+        self.id = id
+        self.bot = bot
+        
+        self.temperature = TemperatureSensor(self.id)
+        self.humidity = HumiditySensor(self.id)
 
-    def add_sensor(self, sensor):
-        self.sensors.append(sensor)
+        self.sensors = [self.temperature, self.humidity]
+        self.actuators = [] 
+    
 
-    def add_actuator(self, actuator):
-        self.actuators.append(actuator)
-
-    def check_thresholds(self):
-        """
-        This function iterates over all the sensors contained in the enclosure, checking its last read and, if needed,
-        sends message via telegram
-        """
+    def loop_once(self):
         for sensor in self.sensors:
-            msg = sensor.check()
-            if msg != "":
-                self.bot.sendMessage(self.chatId, sensor.msg)
+            sensor.random()    # Generate data for every sensor
+            sensor.check()     # 
+
+        if self.temperature.msg == "Temperature too high. Opening the fan...":
+            self.bot.sendMessage(f"-- PRINTER {self.id}: {self.temperature.msg}")
+            # ACTUATOR
+
+        if self.humidity.msg== "Humidity too high. Opening the fan...":
+            self.bot.sendMessage(f"-- PRINTER {self.id}: {self.humidity.msg}")
+            # ACTUATOR
 
 
-class FilamentEnclosure(Enclosure):
-    def __init__(self):
-        Enclosure.__init__(self)
-        for sensor in [TemperatureSensor(), HumiditySensor(), FilamentRunOut()]:
-            self.add_sensor(sensor)
+class FilamentEnclosure(object):
+    def __init__(self, id, bot):
+        self.id = id
+        self.bot = bot
+        
+        self.temperature = TemperatureSensor(self.id)
+        self.humidity = HumiditySensor(self.id)
+        self.filament = FilamentRunOut(self.id)
 
-        ## TO DO: add actuators
+        self.sensors = [self.temperature, self.humidity, self.filament]
+        self.actuators = [] 
+
+    def loop_once(self):
+        for sensor in self.sensors:
+            sensor.random()    # Generate data for every sensor
+            sensor.check()     # 
+
+        if self.temperature.msg == "Temperature too high. Opening the fan...":
+            self.bot.sendMessage(f"-- PRINTER{self.id} (filament): {self.temperature.msg}")
+            # ACTUATOR
+
+        if self.humidity.msg== "Humidity too high. Opening the fan...":
+            self.bot.sendMessage(f"-- PRINTER {self.id} (filament): {self.humidity.msg}")
+            # ACTUATOR
+
+        if self.filament.msg == "FILAMENT RUN OUT":
+            self.bot.sendMessage(f"-- PRINTER {self.id} (filament): {self.humidity.msg}")
+            pass

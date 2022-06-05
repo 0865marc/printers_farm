@@ -10,7 +10,6 @@ class Subscriber_Mqtt():
 
         self.client.connect("localhost")
         self.client.subscribe("sensors/#") 
-        self.client.loop_forever()
 
 
     # The callback for when the client receives a CONNACK response from the server.
@@ -32,4 +31,7 @@ class Subscriber_Mqtt():
 
         
 
+
+# from mqtt_subscriber import Subscriber_Mqtt
+# a = Subscriber_Mqtt()
 
