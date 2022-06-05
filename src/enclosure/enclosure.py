@@ -11,7 +11,7 @@ class Enclosure(object):
     it will have an actuators array, containing the actuators object
     """
 
-    def __init__(self, farm, id):
+    def __init__(self, farm, id:int):
         self.id = id
         self.farm = farm
         self.bot = farm.get_bot()
@@ -43,18 +43,16 @@ class Enclosure(object):
         self.bot.sendMessage(f"ID {self.id}: Closing {self.enclosure_type} gate")
         self.gate.close()
 
-    def loop_once(self):
-        for sensor in self.sensors:
-            sensor.random()    # Generate data for every sensor
-            sensor.check()     # 
-
     def temperatureNotification(self, value):
         self.bot.sendMessage(f"ID {self.id} : ({self.enclosure_type}) -- Temperature too high. [{value} ºC]")
-
 
     def HumidityNotification(self, value):
         self.bot.sendMessage(f"ID {self.id} : ({self.enclosure_type}) -- Humidity too high. [{value} ºC]")
 
+    def loop_once(self):
+        for sensor in self.sensors:
+            sensor.random()    # Generate data for every sensor
+            sensor.check()     # Check lecture, send it via mqtt and activate/open fan/gate
 
 
 
@@ -68,10 +66,7 @@ class PrinterEnclosure(Enclosure):
 class FilamentEnclosure(Enclosure):
     def __init__(self, farm, id):
         super().__init__(farm, id)
-        
-
         self.sensors = [TemperatureSensor(self), HumiditySensor(self), FilamentRunOut(self)]
-
 
     def runOutNotification(self):
         self.bot.sendMessage(f"ID {self.id}: Filament run out")

@@ -29,16 +29,21 @@ class TemperatureSensor(Sensor):
     def check(self):
         if self.lecture > 45:
             # High lecture
-            self.send()                             # Send the lecture via MQTT
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
+            
             self.enclosure.temperatureNotification(self.lecture)
             self.enclosure.activate_fan()
+
         elif self.lecture >= 20:
             # Normal lecture
-            self.send()              
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT           
         else:
             # Error with the lecture
             self.lecture = 99999     
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
 
 
 class HumiditySensor(Sensor):
@@ -54,16 +59,20 @@ class HumiditySensor(Sensor):
     def check(self):
         if self.lecture > 90:
             # High lecture
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
             self.enclosure.HumidityNotification(self.lecture)
             self.enclosure.open_gate()
+
         elif self.lecture >= 0:
             # Normal lecture
-            self.send()   
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT  
         else:
             # Error with the lecture
             self.lecture = 99999
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
 
 
 
@@ -85,12 +94,16 @@ class FilamentRunOut(Sensor):
 
     def check(self):
         if self.lecture == "FILAMENT RUN OUT":
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
             self.enclosure.runOutNotification()
+            
         elif self.lecture == "FILAMENT OK!":
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
         else:
             self.lecture = 99999
-            self.send()
+            if self.publisher.code == 1:                # If successfully conected to the broker
+                self.send()                             # Send the lecture via MQTT
 
 

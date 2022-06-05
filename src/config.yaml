@@ -1,0 +1,6 @@
+telegram:
+  token: "5529655394:AAGN9hGkbrhcVYvq_EWYQzag4P5Y7q56DBs"
+  chat_id: "286104504"
+
+farm:
+  timer: 10
