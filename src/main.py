@@ -10,7 +10,7 @@ For help page:     python main.py --help
 """
 
 import click        ## Create CLI
-
+import yaml
 
 @click.command()
 @click.option("--c", "--configuration", default ="printers_farm_cfg.yaml", type = click.Path("rb"), help = "Path of the configuration file (.yaml)")
@@ -22,11 +22,6 @@ def get_config(cfg_file):
 
 
 if __name__ == "__main__":
-
-    # Start the brokermosquitto -c mosquitto.conf
-
-    # Start subscriber
-
     from enclosure.sensors import TemperatureSensor
     a = TemperatureSensor()
     a.random()
