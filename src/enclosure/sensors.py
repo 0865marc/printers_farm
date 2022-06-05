@@ -1,5 +1,4 @@
-import sys, os
-sys.path.append(os.path.dirname(sys.path[0]))
+
 
 from mqtt.mqtt_publisher import Publisher_Mqtt
 import random
@@ -97,7 +96,7 @@ class FilamentRunOut(Sensor):
             if self.publisher.code == 1:                # If successfully conected to the broker
                 self.send()                             # Send the lecture via MQTT
             self.enclosure.runOutNotification()
-            
+
         elif self.lecture == "FILAMENT OK!":
             if self.publisher.code == 1:                # If successfully conected to the broker
                 self.send()                             # Send the lecture via MQTT

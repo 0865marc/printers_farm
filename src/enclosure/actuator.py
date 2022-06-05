@@ -1,5 +1,3 @@
-
-
 class Actuador(object):
     def __init__(self, enclosure, isFilament = False):
         self.status = 0
