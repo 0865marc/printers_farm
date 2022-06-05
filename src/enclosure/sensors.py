@@ -56,7 +56,7 @@ class HumiditySensor(Sensor):
         self.publish_message(f"sensors/{self.enclosure.get_EnclosureId()}/humidity", self.lecture)
 
     def check(self):
-        if self.lecture > 90:
+        if self.lecture > 95:
             # High lecture
             if self.publisher.code == 1:                # If successfully conected to the broker
                 self.send()                             # Send the lecture via MQTT
@@ -89,7 +89,7 @@ class FilamentRunOut(Sensor):
 
     def send(self):
         """Send last lecture and message of the sensor to the broker via mqtt"""
-        self.publish_message(f"sensors/{self.enclosure.get_EnclosureId}/temperature/lecture", self.lecture)
+        self.publish_message(f"sensors/{self.enclosure.get_EnclosureId}/RunOut", self.lecture)
 
     def check(self):
         if self.lecture == "FILAMENT RUN OUT":

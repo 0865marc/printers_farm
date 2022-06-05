@@ -1,7 +1,5 @@
 import paho.mqtt.client as mqtt         # https://github.com/eclipse/paho.mqtt.python#client
 
-# First, you have to run the mosquitto broker --->   mosquitto -c mosquitto.conf
-
 class Publisher_Mqtt(object):
     def __init__(self) -> None:
         self.client = mqtt.Client()

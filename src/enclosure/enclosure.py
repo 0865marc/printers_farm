@@ -2,7 +2,6 @@
 
 from .sensors import TemperatureSensor, HumiditySensor, FilamentRunOut
 from .actuator import Fan, Gate
-from telegram.telegram import Telegram_Bot
 
 class Enclosure(object):
     """

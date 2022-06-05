@@ -1,7 +1,5 @@
 import paho.mqtt.client as mqtt         # https://github.com/eclipse/paho.mqtt.python#client
 
-# First, you have to run the mosquitto broker --->   mosquitto -c mosquitto.conf
-
 class Subscriber_Mqtt():
     def __init__(self) -> None:
         self.client = mqtt.Client()
@@ -21,13 +19,7 @@ class Subscriber_Mqtt():
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
-        if msg.topic == "sensors/temperature":
-            print(msg.topic+" "+str(msg.payload))
-        elif msg.topic == "sensors/humidity":
-            print(msg.topic+" "+str(msg.payload))
-        else:
-            print(msg.topic+" "+str(msg.payload))
-            print("Unknown topic")
+        print(msg.topic+" "+str(msg.payload))
 
         
 
