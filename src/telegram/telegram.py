@@ -8,9 +8,10 @@ BOT_TOKEN = "5529655394:AAGN9hGkbrhcVYvq_EWYQzag4P5Y7q56DBs"
 
 class Telegram_Bot(object):
 
-    def __init__(self, token, chatId):
-        self.bot = telepot.Bot(token)
-        self.chatId = chatId
+    def __init__(self, farm):
+        self.bot = telepot.Bot(farm.token)
+        self.chatId = farm.chatId
+        self.farm = farm
         MessageLoop(self.bot, self.handle).run_as_thread()
         print("Listening......")
 
@@ -20,13 +21,50 @@ class Telegram_Bot(object):
         if content_type == "text":
             command = msg["text"]
             print(f"Command recieved {chat_id}: ", command)
+            command = command.split(" ")
 
-            if command == "/something":
-                pass
-            elif command == "/somethingDifferent":
-                pass
+            if command[0].upper() == "/add_printer".upper():
+                self.farm.add_printer(int(command[1]))
+
+            elif command[0].upper == "/printers_list".upper():
+                self.farm.printers_list()
+            
+            elif command[0].upper() == "/activate".upper():
+                """/activate <fan or gate> <printer_id> <enclosure or filament>"""
+                printer_id = int(command[2])
+                
+                if printer_id in self.farm.printers.keys():
+                    if command[2].upper() == "enclosure".upper():
+                        enclosure_destination = "Enclosure"
+                    elif command[2].upper() == "filament".upper():
+                        enclosure_destination = "Filament"
+                    else:
+                        enclosure_destination = "Error"
+                        self.farm.bot.sendMessage("Error, must be Enclosure OR Filament")
+
+                    if enclosure_destination != "Error":
+                        if command[1].upper() == "fan".upper():
+                            self.farm.printers[printer_id][enclosure_destination].fan.activate()
+                            self.farm.bot.sendMessage(f"{enclosure_destination} {printer_id}: Fan activated")
+                        elif command[1].upper() == "gate".upper():
+                            self.farm.printers[printer_id][enclosure_destination].gate.activate()
+                            self.farm.bot.sendMessage(f"{enclosure_destination} {printer_id}: Fan deactivated")
+                        else:
+                            self.farm.bot.sendMessage("Error, actuator must be <fan OR gate>")
+
+                else:
+                    self.farm.bot.sendMessage("Printer does not exist")
+            
+
+
+            elif command[0] == "/help" or "/start":
+                if command[0] == "/start":
+                    self.farm.bot.sendMessage("Welcome to Printers_farm bot")
+                self.farm.bot.sendMessage("\t /add_printer <printer_id> to add a new printer\n")
+                self.farm.bot.sendMessage("\t /printers_list to see all printers registered\n")
+
             else:
-                print("Unknown command")
+                self.farm.bot.sendMessage("Unknown command, use /help to get more info")
     
     def getBot(self):
         return self.bot
